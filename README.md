@@ -27,16 +27,6 @@ description: Manage the contacts on the device.
 
 # cordova-plugin-contacts
 
-This plugin defines a global `navigator.contacts` object, which provides access to the device contacts database.
-
-Although the object is attached to the global scoped `navigator`, it is not available until after the `deviceready` event.
-```js
-document.addEventListener("deviceready", onDeviceReady, false);
-function onDeviceReady() {
-console.log(navigator.contacts);
-}
-```
-
 __WARNING__: Collection and use of contact data raises
 important privacy issues.  Your app's privacy policy should discuss
 how the app uses contact data and whether it is shared with any other
@@ -138,8 +128,11 @@ Any contacts returned are readonly, so your application cannot modify them.
 - ContactFieldType
 
 ## navigator.contacts.create
-
-The `navigator.contacts.create` method is synchronous, and returns a new `Contact` object.
+first import objects you want to use in your page
+`import { Contacts, Contact , ContactField , ContactName } from '@ionic-native/contacts';`
+``...
+constructor(private contacts: Contacts) {}``
+The `Contacts.create` method is synchronous, and returns a new `Contact` object.
 
 This method does not retain the Contact object in the device contacts
 database, for which you need to invoke the `Contact.save` method.
@@ -155,7 +148,7 @@ database, for which you need to invoke the `Contact.save` method.
 ### Example
 
 ```js
-    var myContact = navigator.contacts.create({"displayName": "Test User"});
+    var myContact = Contacts.create({"displayName": "Test User"});
 ```
 
 ## navigator.contacts.find
@@ -255,11 +248,12 @@ function specified by the __contactSuccess__ parameter.
 ### Example
 
 ```js
-navigator.contacts.pickContact(function(contact){
-        console.log('The following contact has been selected:' + JSON.stringify(contact));
-    },function(err){
-        console.log('Error: ' + err);
-    });
+pickContact(){
+    this.contacts.pickContact().then(contact =>{
+      alert('The following contact has been selected:' + JSON.stringify(contact));
+    })
+  
+  }
 ```
 
 ### Android Quirks
